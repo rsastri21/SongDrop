@@ -10,7 +10,7 @@ import OrderedCollections
 
 protocol Caching: Actor {
     
-    associatedtype V
+    associatedtype V: Codable
     var ttl: TimeInterval { get }
     
     func get(forKey key: String) -> V?
