@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		1C57BD282F57EECF0046971C /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 1C57BD272F57EECF0046971C /* OrderedCollections */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		1C57BCFE2F56ABFC0046971C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1C57BD282F57EECF0046971C /* OrderedCollections in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = SongDrop;
 			packageProductDependencies = (
+				1C57BD272F57EECF0046971C /* OrderedCollections */,
 			);
 			productName = SongDrop;
 			productReference = 1C57BCF02F56ABFB0046971C /* SongDrop.app */;
@@ -195,6 +201,9 @@
 			);
 			mainGroup = 1C57BCE72F56ABFB0046971C;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				1C57BD262F57EECF0046971C /* XCRemoteSwiftPackageReference "swift-collections" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1C57BCF12F56ABFB0046971C /* Products */;
 			projectDirPath = "";
@@ -578,6 +587,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1C57BD262F57EECF0046971C /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1C57BD272F57EECF0046971C /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1C57BD262F57EECF0046971C /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1C57BCE82F56ABFB0046971C /* Project object */;
 }
