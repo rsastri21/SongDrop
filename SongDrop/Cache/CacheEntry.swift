@@ -7,7 +7,7 @@
 
 import Foundation
 
-nonisolated final class CacheEntry<V: Codable> {
+nonisolated final class CacheEntry<V> {
     
     let key: String
     let value: V
