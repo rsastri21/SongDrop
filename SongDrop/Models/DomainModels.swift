@@ -142,3 +142,50 @@ enum ResolveItem: Codable {
         }
     }
 }
+
+// MARK: - API Request Contract
+
+struct TypeaheadRequest: Codable {
+    let mode: SearchMode
+    let provider: Provider
+    let query: String
+}
+
+struct ResolveRequest: Codable {
+    let mode: SearchMode
+    let provider: Provider
+    let type: ResourceType
+    let query: String
+}
+
+enum SearchRequest: Codable {
+    case typeahead(TypeaheadRequest)
+    case resolve(ResolveRequest)
+    
+    private enum CodingKeys: String, CodingKey {
+        case mode
+    }
+    
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let mode = try container.decode(SearchMode.self, forKey: .mode)
+        
+        switch mode {
+        case .typeahead:
+            let request = try TypeaheadRequest(from: decoder)
+            self = .typeahead(request)
+        case .resolve:
+            let request = try ResolveRequest(from: decoder)
+            self = .resolve(request)
+        }
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        switch self {
+        case .typeahead(let request):
+            try request.encode(to: encoder)
+        case .resolve(let request):
+            try request.encode(to: encoder)
+        }
+    }
+}
