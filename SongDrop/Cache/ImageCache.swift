@@ -23,7 +23,9 @@ actor ImageCache {
     private let cacheDirectory: URL
     private let metadataCache: NSCache<NSString, CacheEntry<FetchState>>
     
-    init(fileManager: FileManager = .default, urlSession: URLSession = .shared, metadataCache: NSCache<NSString, CacheEntry<FetchState>>) {
+    public static let shared = ImageCache()
+    
+    init(fileManager: FileManager = .default, urlSession: URLSession = .shared, metadataCache: NSCache<NSString, CacheEntry<FetchState>> = .init()) {
         self.fileManager = fileManager
         self.urlSession = urlSession
         self.cacheDirectory = fileManager.urls(for: .cachesDirectory, in: .userDomainMask)[0].appendingPathComponent("imagecache", isDirectory: true)
