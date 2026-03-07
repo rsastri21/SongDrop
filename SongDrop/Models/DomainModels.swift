@@ -15,7 +15,7 @@ enum ResourceType: String, Codable {
     case album
 }
 
-enum Provider: String, Codable {
+enum Provider: String, CaseIterable, Codable {
     case spotify
     case appleMusic
 }

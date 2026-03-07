@@ -27,7 +27,7 @@ actor NetworkCache<V: Codable>: NetworkCaching {
     private let decoder: JSONDecoder
     private let urlSession: URLSession
     
-    init(cache: Cache<V>, decoder: JSONDecoder = .init(), urlSession: URLSession = .shared) {
+    init(cache: Cache<V> = .init(filename: "networkcache"), decoder: JSONDecoder = .init(), urlSession: URLSession = .shared) {
         self.cache = cache
         self.decoder = decoder
         self.urlSession = urlSession
