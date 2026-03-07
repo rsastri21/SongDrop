@@ -8,7 +8,7 @@
 import Foundation
 import OrderedCollections
 
-protocol Caching: Actor {
+protocol Caching<V>: Actor {
     
     associatedtype V: Codable
     var ttl: TimeInterval { get }

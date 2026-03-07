@@ -22,12 +22,12 @@ protocol NetworkCaching: Actor {
 
 actor NetworkCache<V: Codable>: NetworkCaching {
     
-    private let cache: Cache<V>
+    private let cache: any Caching<V>
     private var inflightTasks: [String: Task<V, Error>] = [:]
     private let decoder: JSONDecoder
-    private let urlSession: URLSession
+    private let urlSession: URLSessionProtocol
     
-    init(cache: Cache<V> = .init(filename: "networkcache"), decoder: JSONDecoder = .init(), urlSession: URLSession = .shared) {
+    init(cache: any Caching<V> = Cache(filename: "networkcache"), decoder: JSONDecoder = .init(), urlSession: URLSessionProtocol = URLSession.shared) {
         self.cache = cache
         self.decoder = decoder
         self.urlSession = urlSession
@@ -66,6 +66,10 @@ actor NetworkCache<V: Codable>: NetworkCaching {
         return await cache.getRecent(count: count)
     }
     
+    func hydrate() async {
+        try? await cache.loadFromDisk()
+    }
+    
     func invalidate() async {
         await cache.removeAll()
     }
@@ -74,7 +78,7 @@ actor NetworkCache<V: Codable>: NetworkCaching {
         return Task<V, Error> {
             defer { Task { removeTask(for: key) } }
             
-            let (data, response) = try await urlSession.data(for: request)
+            let (data, response) = try await urlSession.data(for: request, delegate: nil)
             guard let resp = response as? HTTPURLResponse, (200...299).contains(resp.statusCode) else {
                 throw NetworkError.httpError(message: "Invalid response code")
             }

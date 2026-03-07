@@ -19,13 +19,13 @@ enum FetchState {
 actor ImageCache {
     
     private let fileManager: FileManager
-    private let urlSession: URLSession
+    private let urlSession: URLSessionProtocol
     private let cacheDirectory: URL
     private let metadataCache: NSCache<NSString, CacheEntry<FetchState>>
     
     public static let shared = ImageCache()
     
-    init(fileManager: FileManager = .default, urlSession: URLSession = .shared, metadataCache: NSCache<NSString, CacheEntry<FetchState>> = .init()) {
+    init(fileManager: FileManager = .default, urlSession: URLSessionProtocol = URLSession.shared, metadataCache: NSCache<NSString, CacheEntry<FetchState>> = .init()) {
         self.fileManager = fileManager
         self.urlSession = urlSession
         self.cacheDirectory = fileManager.urls(for: .cachesDirectory, in: .userDomainMask)[0].appendingPathComponent("imagecache", isDirectory: true)
@@ -87,7 +87,7 @@ actor ImageCache {
     private func createDownloadTask(for url: URL) -> Task<URL, Error> {
         return Task<URL, Error> {
             let destination = diskUrl(for: url)
-            let (tempUrl, _) = try await urlSession.download(from: url)
+            let (tempUrl, _) = try await urlSession.download(from: url, delegate: nil)
             try fileManager.moveItem(at: tempUrl, to: destination)
             return destination
         }

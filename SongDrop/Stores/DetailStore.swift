@@ -42,7 +42,7 @@ extension DetailStorable {
                         for: .resolve(
                             ResolveRequest(
                                 mode: .resolve,
-                                provider: defaultProvider,
+                                provider: provider,
                                 type: type,
                                 query: searchTerm
                             )

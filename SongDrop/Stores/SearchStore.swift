@@ -96,6 +96,7 @@ final class SearchStore {
             albums = typeahead.albums
         case .resolve(_):
             // no-op, handled by DetailStore
+            return
         }
     }
 }
