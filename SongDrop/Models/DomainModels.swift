@@ -189,3 +189,15 @@ enum SearchRequest: Codable {
         }
     }
 }
+
+// MARK: - Encodable Extension
+
+extension Encodable {
+    var queryItems: [URLQueryItem] {
+        guard let data = try? JSONEncoder().encode(self),
+              let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            return []
+        }
+        return dict.compactMap { URLQueryItem(name: $0.key, value: $0.value as? String) }
+    }
+}
