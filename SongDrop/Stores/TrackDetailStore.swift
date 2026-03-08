@@ -12,7 +12,7 @@ import Foundation
 final class TrackDetailStore: DetailStorable {
 
     let networkCache: NetworkCache<SearchResponse>
-    let endpoint = "http://localhost:3000/v1/search"
+    let endpoint: String
     let item: Track
     let defaultProvider: Provider
     var type: ResourceType { item.type }
@@ -26,10 +26,12 @@ final class TrackDetailStore: DetailStorable {
 
     init(
         networkCache: NetworkCache<SearchResponse>,
+        apiConfig: APIConfig,
         item: Track,
         provider: Provider
     ) {
         self.networkCache = networkCache
+        self.endpoint = apiConfig.search.absoluteString
         self.item = item
         self.defaultProvider = provider
 

@@ -12,7 +12,7 @@ import Foundation
 final class SearchStore {
 
     private let networkCache: NetworkCache<SearchResponse>
-    private let endpoint = "http://localhost:3000/v1/search"
+    private let endpoint: String
 
     enum SearchError: Error {
         case failed(Error)
@@ -34,8 +34,9 @@ final class SearchStore {
     public var isLoading: Bool = false
     public var searchError: SearchError? = nil
 
-    init(networkCache: NetworkCache<SearchResponse>) {
+    init(networkCache: NetworkCache<SearchResponse>, apiConfig: APIConfig) {
         self.networkCache = networkCache
+        self.endpoint = apiConfig.search.absoluteString
     }
 
     func search() async {

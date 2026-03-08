@@ -12,7 +12,7 @@ import Foundation
 final class AlbumDetailStore: DetailStorable {
 
     let networkCache: NetworkCache<SearchResponse>
-    let endpoint = "http://localhost:3000/v1/search"
+    let endpoint: String
     let item: Album
     let defaultProvider: Provider
     var type: ResourceType { item.type }
@@ -26,11 +26,13 @@ final class AlbumDetailStore: DetailStorable {
 
     init(
         networkCache: NetworkCache<SearchResponse>,
+        apiConfig: APIConfig,
         item: Album,
         provider: Provider
     ) {
         self.networkCache = networkCache
         self.item = item
+        self.endpoint = apiConfig.search.absoluteString
         self.defaultProvider = provider
 
         // TODO: Dynamic provider
