@@ -24,7 +24,7 @@ final class ImageStore {
     
     public static let shared = ImageStore()
     
-    init(cache: ImageCache = .init()) {
+    init(cache: ImageCache = .shared) {
         self.cache = cache
     }
     

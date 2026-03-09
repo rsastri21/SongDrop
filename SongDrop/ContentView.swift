@@ -8,17 +8,24 @@
 import SwiftUI
 
 struct ContentView: View {
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView {
+            Tab("Recents", systemImage: "music.note") {
+                Text("Recents View")
+            }
+            Tab("Settings", systemImage: "gear") {
+                Text("Settings View")
+            }
+            Tab("Search", systemImage: "magnifyingglass", role: .search) {
+                SearchView()
+            }
         }
-        .padding()
     }
 }
 
 #Preview {
     ContentView()
+        .environment(SearchStore(networkCache: .init(), apiConfig: APIConfig()))
+        .environment(ImageStore())
 }

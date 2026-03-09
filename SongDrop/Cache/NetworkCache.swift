@@ -52,6 +52,10 @@ actor NetworkCache<V: Codable>: NetworkCaching {
         let task = createTask(request: urlRequest, forKey: urlString)
         inflightTasks[urlString] = task
         
+        defer {
+            inflightTasks[urlString] = nil
+        }
+        
         do {
             let value = try await task.value
             await cache.set(value, forKey: urlString)

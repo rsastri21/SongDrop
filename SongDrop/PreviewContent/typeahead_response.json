@@ -1,0 +1,189 @@
+{
+    "mode": "typeahead",
+    "tracks": [
+        {
+            "id": "0tgVpDi06FyKpA1z0VMD4v",
+            "name": "Perfect",
+            "artists": [
+                "Ed Sheeran"
+            ],
+            "album": "÷ (Deluxe)",
+            "thumbnail":
+                "https://i.scdn.co/image/ab67616d00004851ba5db46f4b838ef6027e6f96",
+            "art":
+                "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96",
+            "shareUrl": "https://open.spotify.com/track/0tgVpDi06FyKpA1z0VMD4v",
+            "type": "track"
+        },
+        {
+            "id": "7qiZfU4dY1lWllzX7mPBI3",
+            "name": "Shape of You",
+            "artists": [
+                "Ed Sheeran"
+            ],
+            "album": "÷ (Deluxe)",
+            "thumbnail":
+                "https://i.scdn.co/image/ab67616d00004851ba5db46f4b838ef6027e6f96",
+            "art":
+                "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96",
+            "shareUrl": "https://open.spotify.com/track/7qiZfU4dY1lWllzX7mPBI3",
+            "type": "track"
+        },
+        {
+            "id": "0afhq8XCExXpqazXczTSve",
+            "name": "Galway Girl",
+            "artists": [
+                "Ed Sheeran"
+            ],
+            "album": "÷ (Deluxe)",
+            "thumbnail":
+                "https://i.scdn.co/image/ab67616d00004851ba5db46f4b838ef6027e6f96",
+            "art":
+                "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96",
+            "shareUrl": "https://open.spotify.com/track/0afhq8XCExXpqazXczTSve",
+            "type": "track"
+        },
+        {
+            "id": "50nfwKoDiSYg8zOCREWAm5",
+            "name": "Shivers",
+            "artists": [
+                "Ed Sheeran"
+            ],
+            "album": "=",
+            "thumbnail":
+                "https://i.scdn.co/image/ab67616d00004851dc806722f6802a8ea9953c89",
+            "art":
+                "https://i.scdn.co/image/ab67616d0000b273dc806722f6802a8ea9953c89",
+            "shareUrl": "https://open.spotify.com/track/50nfwKoDiSYg8zOCREWAm5",
+            "type": "track"
+        },
+        {
+            "id": "5smzdAtuOJOp3jEKjTno3p",
+            "name": "I Only Miss You (feat. Ed Sheeran)",
+            "artists": [
+                "Megan Moroney",
+                "Ed Sheeran"
+            ],
+            "album": "Cloud 9",
+            "thumbnail":
+                "https://i.scdn.co/image/ab67616d0000485101fe49cd6f9b1e20676f2169",
+            "art":
+                "https://i.scdn.co/image/ab67616d0000b27301fe49cd6f9b1e20676f2169",
+            "shareUrl": "https://open.spotify.com/track/5smzdAtuOJOp3jEKjTno3p",
+            "type": "track"
+        }
+    ],
+    "artists": [
+        {
+            "id": "6eUKZXaKkcviH0Ku9w2n3V",
+            "name": "Ed Sheeran",
+            "thumbnail":
+                "https://i.scdn.co/image/ab6761610000f178d55c95ad400aed87da52daec",
+            "art":
+                "https://i.scdn.co/image/ab6761610000e5ebd55c95ad400aed87da52daec",
+            "shareUrl":
+                "https://open.spotify.com/artist/6eUKZXaKkcviH0Ku9w2n3V",
+            "type": "artist"
+        },
+        {
+            "id": "4q3ewBCX7sLwd24euuV69X",
+            "name": "Bad Bunny",
+            "thumbnail":
+                "https://i.scdn.co/image/ab6761610000f17881f47f44084e0a09b5f0fa13",
+            "art":
+                "https://i.scdn.co/image/ab6761610000e5eb81f47f44084e0a09b5f0fa13",
+            "shareUrl":
+                "https://open.spotify.com/artist/4q3ewBCX7sLwd24euuV69X",
+            "type": "artist"
+        },
+        {
+            "id": "0du5cEVh5yTK9QJze8zA0C",
+            "name": "Bruno Mars",
+            "thumbnail":
+                "https://i.scdn.co/image/ab6761610000f178c7688aad1bf03986934d7e26",
+            "art":
+                "https://i.scdn.co/image/ab6761610000e5ebc7688aad1bf03986934d7e26",
+            "shareUrl":
+                "https://open.spotify.com/artist/0du5cEVh5yTK9QJze8zA0C",
+            "type": "artist"
+        },
+        {
+            "id": "6KImCVD70vtIoJWnq6nGn3",
+            "name": "Harry Styles",
+            "thumbnail":
+                "https://i.scdn.co/image/ab6761610000f178e309f8c3056a59f20d0968ca",
+            "art":
+                "https://i.scdn.co/image/ab6761610000e5ebe309f8c3056a59f20d0968ca",
+            "shareUrl":
+                "https://open.spotify.com/artist/6KImCVD70vtIoJWnq6nGn3",
+            "type": "artist"
+        },
+        {
+            "id": "1WsYCXdezMjn0KoIrLvMmC",
+            "name": "Ed Sheeran & Justin Bieber",
+            "thumbnail": "",
+            "art": "",
+            "shareUrl":
+                "https://open.spotify.com/artist/1WsYCXdezMjn0KoIrLvMmC",
+            "type": "artist"
+        }
+    ],
+    "albums": [
+        {
+            "id": "3T4tUhGYeRNVUGevb0wThu",
+            "name": "÷ (Deluxe)",
+            "artist": "Ed Sheeran",
+            "thumbnail":
+                "https://i.scdn.co/image/ab67616d00004851ba5db46f4b838ef6027e6f96",
+            "art":
+                "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96",
+            "shareUrl": "https://open.spotify.com/album/3T4tUhGYeRNVUGevb0wThu",
+            "type": "album"
+        },
+        {
+            "id": "1xn54DMo2qIqBuMqHtUsFd",
+            "name": "x (Deluxe Edition)",
+            "artist": "Ed Sheeran",
+            "thumbnail":
+                "https://i.scdn.co/image/ab67616d0000485113b3e37318a0c247b550bccd",
+            "art":
+                "https://i.scdn.co/image/ab67616d0000b27313b3e37318a0c247b550bccd",
+            "shareUrl": "https://open.spotify.com/album/1xn54DMo2qIqBuMqHtUsFd",
+            "type": "album"
+        },
+        {
+            "id": "2ajCD41iDxflpYBZmSO9S7",
+            "name": "Play (Deluxe)",
+            "artist": "Ed Sheeran",
+            "thumbnail":
+                "https://i.scdn.co/image/ab67616d000048517664249f7d79690437fb0346",
+            "art":
+                "https://i.scdn.co/image/ab67616d0000b2737664249f7d79690437fb0346",
+            "shareUrl": "https://open.spotify.com/album/2ajCD41iDxflpYBZmSO9S7",
+            "type": "album"
+        },
+        {
+            "id": "32iAEBstCjauDhyKpGjTuq",
+            "name": "=",
+            "artist": "Ed Sheeran",
+            "thumbnail":
+                "https://i.scdn.co/image/ab67616d00004851dc806722f6802a8ea9953c89",
+            "art":
+                "https://i.scdn.co/image/ab67616d0000b273dc806722f6802a8ea9953c89",
+            "shareUrl": "https://open.spotify.com/album/32iAEBstCjauDhyKpGjTuq",
+            "type": "album"
+        },
+        {
+            "id": "6NoBzYmh5gUusGPCfg0pct",
+            "name": "x (Wembley Edition)",
+            "artist": "Ed Sheeran",
+            "thumbnail":
+                "https://i.scdn.co/image/ab67616d00004851d08209944468440145f01524",
+            "art":
+                "https://i.scdn.co/image/ab67616d0000b273d08209944468440145f01524",
+            "shareUrl": "https://open.spotify.com/album/6NoBzYmh5gUusGPCfg0pct",
+            "type": "album"
+        }
+    ],
+    "from": "spotify"
+}

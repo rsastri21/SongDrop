@@ -7,6 +7,36 @@
 
 import Foundation
 
+// MARK: - Decoding Utility
+
+@propertyWrapper
+struct NilOnEmptyURL: Codable, Equatable, Hashable {
+    var wrappedValue: URL?
+
+    init(wrappedValue: URL?) {
+        self.wrappedValue = wrappedValue
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let string = try container.decode(String.self)
+        if !string.isEmpty {
+            wrappedValue = URL(string: string)
+        } else {
+            wrappedValue = nil
+        }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        if let url = wrappedValue {
+            try container.encode(url.absoluteString)
+        } else {
+            try container.encodeNil()
+        }
+    }
+}
+
 // MARK: - Enums
 
 enum ResourceType: String, Codable {
@@ -22,7 +52,7 @@ enum Provider: String, CaseIterable, Codable {
 
 // MARK: - Core Models
 
-struct Track: Codable {
+struct Track: Codable, Hashable, Identifiable {
     let id: String
     let name: String
     let artists: [String]
@@ -33,16 +63,16 @@ struct Track: Codable {
     let type: ResourceType
 }
 
-struct Artist: Codable {
+struct Artist: Codable, Hashable, Identifiable {
     let id: String
     let name: String
-    let thumbnail: URL
-    let art: URL
+    @NilOnEmptyURL var thumbnail: URL?
+    @NilOnEmptyURL var art: URL?
     let shareUrl: URL
     let type: ResourceType
 }
 
-struct Album: Codable {
+struct Album: Codable, Hashable, Identifiable {
     let id: String
     let name: String
     let artist: String
@@ -76,15 +106,15 @@ struct ResolveResponse: Codable {
 enum SearchResponse: Codable {
     case typeahead(TypeaheadResponse)
     case resolve(ResolveResponse)
-    
+
     private enum CodingKeys: String, CodingKey {
         case mode
     }
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let mode = try container.decode(SearchMode.self, forKey: .mode)
-        
+
         switch mode {
         case .typeahead:
             let response = try TypeaheadResponse(from: decoder)
@@ -94,7 +124,7 @@ enum SearchResponse: Codable {
             self = .resolve(response)
         }
     }
-    
+
     func encode(to encoder: Encoder) throws {
         switch self {
         case .typeahead(let typeaheadResponse):
@@ -109,15 +139,15 @@ enum ResolveItem: Codable {
     case track(Track)
     case artist(Artist)
     case album(Album)
-    
+
     private enum CodingKeys: String, CodingKey {
         case type
     }
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let itemType = try container.decode(ResourceType.self, forKey: .type)
-        
+
         switch itemType {
         case .track:
             let track = try Track(from: decoder)
@@ -130,7 +160,7 @@ enum ResolveItem: Codable {
             self = .album(album)
         }
     }
-    
+
     func encode(to encoder: Encoder) throws {
         switch self {
         case .track(let track):
@@ -161,15 +191,15 @@ struct ResolveRequest: Codable {
 enum SearchRequest: Codable {
     case typeahead(TypeaheadRequest)
     case resolve(ResolveRequest)
-    
+
     private enum CodingKeys: String, CodingKey {
         case mode
     }
-    
+
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let mode = try container.decode(SearchMode.self, forKey: .mode)
-        
+
         switch mode {
         case .typeahead:
             let request = try TypeaheadRequest(from: decoder)
@@ -179,7 +209,7 @@ enum SearchRequest: Codable {
             self = .resolve(request)
         }
     }
-    
+
     func encode(to encoder: Encoder) throws {
         switch self {
         case .typeahead(let request):
@@ -195,9 +225,14 @@ enum SearchRequest: Codable {
 extension Encodable {
     var queryItems: [URLQueryItem] {
         guard let data = try? JSONEncoder().encode(self),
-              let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            let dict = try? JSONSerialization.jsonObject(with: data)
+                as? [String: Any]
+        else {
             return []
         }
-        return dict.compactMap { URLQueryItem(name: $0.key, value: $0.value as? String) }
+        return dict.compactMap {
+            URLQueryItem(name: $0.key, value: $0.value as? String)
+        }
+        .sorted { $0.name < $1.name }
     }
 }
