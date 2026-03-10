@@ -45,7 +45,11 @@ enum ResourceType: String, Codable {
     case album
 }
 
-enum Provider: String, CaseIterable, Codable {
+enum Provider: String, CaseIterable, Codable, Comparable {
+    static func < (lhs: Provider, rhs: Provider) -> Bool {
+        lhs.rawValue < rhs.rawValue
+    }
+    
     case spotify
     case appleMusic
 }
