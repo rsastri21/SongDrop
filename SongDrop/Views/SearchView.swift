@@ -64,6 +64,9 @@ struct SearchView: View {
                 }
             }
             .navigationTitle(Text("Search"))
+            .navigationDestination(for: Track.self) { track in
+                TrackDetailView(track: track)
+            }
             .searchable(text: $bindableSearchStore.query)
         }
     }

@@ -56,6 +56,11 @@ enum Provider: String, CaseIterable, Codable, Comparable {
 
 // MARK: - Core Models
 
+struct ShareUrl: Codable, Hashable {
+    let spotify: URL?
+    let appleMusic: URL?
+}
+
 struct Track: Codable, Hashable, Identifiable {
     let id: String
     let name: String
@@ -63,7 +68,7 @@ struct Track: Codable, Hashable, Identifiable {
     let album: String
     let thumbnail: URL
     let art: URL
-    let shareUrl: URL
+    let shareUrl: ShareUrl
     let type: ResourceType
 }
 
@@ -72,7 +77,7 @@ struct Artist: Codable, Hashable, Identifiable {
     let name: String
     @NilOnEmptyURL var thumbnail: URL?
     @NilOnEmptyURL var art: URL?
-    let shareUrl: URL
+    let shareUrl: ShareUrl
     let type: ResourceType
 }
 
@@ -82,7 +87,7 @@ struct Album: Codable, Hashable, Identifiable {
     let artist: String
     let thumbnail: URL
     let art: URL
-    let shareUrl: URL
+    let shareUrl: ShareUrl
     let type: ResourceType
 }
 

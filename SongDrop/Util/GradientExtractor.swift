@@ -14,7 +14,7 @@ struct GradientColors {
 
 enum GradientExtractor {
     // Max dimension for downsampling before regression
-    private static let maxSampleDimension: Int = 64
+    private static let maxSampleDimension: Int = 32
 
     /// Swift implementation of JS dont-crop library
     static func fitGradient(from image: UIImage) -> GradientColors? {
@@ -104,19 +104,23 @@ enum GradientExtractor {
             )
             return GradientColors(top: avg, bottom: avg)
         }
-        
-        func regress(sumX: Double, sumTX: Double) -> (intercept: Double, slope: Double) {
+
+        func regress(sumX: Double, sumTX: Double) -> (
+            intercept: Double, slope: Double
+        ) {
             let slope = (n * sumTX - sumT * sumX) / denom
             let intercept = (sumX - slope * sumT) / n
             return (intercept, slope)
         }
-        
+
         let rReg = regress(sumX: sumR, sumTX: sumTR)
         let gReg = regress(sumX: sumG, sumTX: sumTG)
         let bReg = regress(sumX: sumB, sumTX: sumTB)
-        
-        func clamp01(_ v: Double) -> CGFloat { CGFloat(max(0, min(v / 255.0, 1.0))) }
-        
+
+        func clamp01(_ v: Double) -> CGFloat {
+            CGFloat(max(0, min(v / 255.0, 1.0)))
+        }
+
         let top = UIColor(
             red: clamp01(rReg.intercept),
             green: clamp01(gReg.intercept),
@@ -129,7 +133,47 @@ enum GradientExtractor {
             blue: clamp01(bReg.intercept + bReg.slope),
             alpha: 1
         )
-        
+
         return GradientColors(top: top, bottom: bottom)
     }
+
+    static func isDark(colors: GradientColors?) -> Bool {
+        guard let colors else { return false }
+        
+        let color = average(colors.top, colors.bottom)
+
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        guard color.getRed(&red, green: &green, blue: &blue, alpha: nil) else {
+            return false
+        }
+
+        // Calculate luminance using the standard formula
+        let luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue
+
+        // Return true if the luminance is below a certain threshold (e.g., 0.5)
+        return luminance < 0.5
+    }
+
+    static func average(_ c1: UIColor, _ c2: UIColor) -> UIColor {
+        var (r1, g1, b1, a1): (CGFloat, CGFloat, CGFloat, CGFloat) = (
+            0, 0, 0, 0
+        )
+        var (r2, g2, b2, a2): (CGFloat, CGFloat, CGFloat, CGFloat) = (
+            0, 0, 0, 0
+        )
+
+        // Convert both colors to RGBA in the extended sRGB space
+        c1.getRed(&r1, green: &g1, blue: &b1, alpha: &a1)
+        c2.getRed(&r2, green: &g2, blue: &b2, alpha: &a2)
+
+        return UIColor(
+            red: (r1 + r2) / 2,
+            green: (g1 + g2) / 2,
+            blue: (b1 + b2) / 2,
+            alpha: (a1 + a2) / 2
+        )
+    }
+
 }

@@ -13,16 +13,13 @@ final class AlbumDetailStore: DetailStorable {
 
     let networkCache: NetworkCache<SearchResponse>
     let endpoint: String
-    let item: Album
     let defaultProvider: Provider
-    var type: ResourceType { item.type }
-    var searchTerm: String {
-        "\(item.name) \(item.artist)"
-    }
 
     public var isSearching: Bool = false
-    public var shareUrls: [Provider: URL] = [:]
+    public var shareUrls: ShareUrl? = nil
     public var detailError: DetailError? = nil
+    // TODO: Get provider dynamically
+    public let provider: Provider = .spotify
 
     init(
         networkCache: NetworkCache<SearchResponse>,
@@ -31,16 +28,15 @@ final class AlbumDetailStore: DetailStorable {
         provider: Provider
     ) {
         self.networkCache = networkCache
-        self.item = item
         self.endpoint = apiConfig.search.absoluteString
         self.defaultProvider = provider
-
-        // TODO: Dynamic provider
-        self.shareUrls[self.defaultProvider] = item.shareUrl
     }
 
-    func search() async {
-        await performSequentialSearch()
+    func search(for item: Album) async {
+        var searchTerm: String {
+            "\(item.name) \(item.artist)"
+        }
+        await performSearch(term: searchTerm, type: item.type)
     }
 }
 

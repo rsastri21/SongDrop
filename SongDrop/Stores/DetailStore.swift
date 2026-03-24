@@ -11,51 +11,49 @@ enum DetailError: Error {
     case failed(Error)
 }
 
-protocol DetailStorable: AnyObject {
+protocol DetailStorable<V>: AnyObject {
+    
+    associatedtype V
     var networkCache: NetworkCache<SearchResponse> { get }
     var endpoint: String { get }
-    var type: ResourceType { get }
-    var searchTerm: String { get }
     var defaultProvider: Provider { get }
     var isSearching: Bool { get set }
-    var shareUrls: [Provider: URL] { get set }
+    var shareUrls: ShareUrl? { get set }
     var detailError: DetailError? { get set }
+    var provider: Provider { get }
 
-    func search() async
+    func search(for item: V) async
 }
 
 @MainActor
 extension DetailStorable {
-    
-    func performSequentialSearch() async {
+
+    func performSearch(term: String, type: ResourceType) async {
         detailError = nil
         isSearching = true
         defer { isSearching = false }
-        let providersToSearch = Provider.allCases.filter {
-            defaultProvider != $0
-        }
 
         do {
-            for provider in providersToSearch {
-                guard
-                    let request = self.buildRequest(
-                        for: .resolve(
-                            ResolveRequest(
-                                mode: .resolve,
-                                provider: provider,
-                                type: type,
-                                query: searchTerm
-                            )
+            guard
+                let request = self.buildRequest(
+                    for: .resolve(
+                        ResolveRequest(
+                            mode: .resolve,
+                            provider: provider,
+                            type: type,
+                            query: term
                         )
                     )
-                else { return }
-                
-                let resp = try await networkCache.get(from: request)
-                guard let response = resp else { return }
-                
-                guard let (from, url) = self.handleResponse(for: response) else { return }
-                self.shareUrls[from] = url
+                )
+            else { return }
+
+            let resp = try await networkCache.get(from: request)
+            guard let response = resp else { return }
+
+            guard let shareUrl = self.handleResponse(for: response) else {
+                return
             }
+            shareUrls = shareUrl
         } catch {
             detailError = .failed(error)
         }
@@ -77,20 +75,17 @@ extension DetailStorable {
         return URLRequest(url: url)
     }
 
-    func handleResponse(for response: SearchResponse) -> (Provider, URL)? {
+    func handleResponse(for response: SearchResponse) -> ShareUrl? {
         switch response {
         case .resolve(let resolve):
-            let from = resolve.from
-            let shareUrl: URL
             switch resolve.item {
             case .album(let album):
-                shareUrl = album.shareUrl
+                return album.shareUrl
             case .artist(let artist):
-                shareUrl = artist.shareUrl
+                return artist.shareUrl
             case .track(let track):
-                shareUrl = track.shareUrl
+                return track.shareUrl
             }
-            return (from, shareUrl)
         case .typeahead(_):
             // no-op, handled by SearchStore
             return nil

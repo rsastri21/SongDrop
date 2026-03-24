@@ -27,5 +27,6 @@ struct ContentView: View {
 #Preview {
     ContentView()
         .environment(SearchStore(networkCache: .init(), apiConfig: APIConfig()))
+        .environment(TrackDetailStore(networkCache: .init(), apiConfig: APIConfig(), provider: .spotify))
         .environment(ImageStore())
 }
