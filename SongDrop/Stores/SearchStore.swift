@@ -32,8 +32,10 @@ final class SearchStore: SearchStorable {
 
     private let networkCache: NetworkCache<SearchResponse>
     private let endpoint: String
-    
-    @ObservationIgnored private var queryTextSubject = CurrentValueSubject<String, Never>("")
+
+    @ObservationIgnored private var queryTextSubject = CurrentValueSubject<
+        String, Never
+    >("")
     @ObservationIgnored private var cancellables = Set<AnyCancellable>()
 
     // MARK: - State
@@ -50,6 +52,7 @@ final class SearchStore: SearchStorable {
     public var tracks: [Track] = []
     public var artists: [Artist] = []
     public var albums: [Album] = []
+    public var recents: [ResolveItem] = []
 
     public var isEmpty: Bool {
         tracks.isEmpty && artists.isEmpty && albums.isEmpty
@@ -60,7 +63,7 @@ final class SearchStore: SearchStorable {
     init(networkCache: NetworkCache<SearchResponse>, apiConfig: APIConfig) {
         self.networkCache = networkCache
         self.endpoint = apiConfig.search.absoluteString
-        
+
         queryTextSubject
             .filter { $0.isEmpty }
             .sink { [weak self] _ in
@@ -69,10 +72,12 @@ final class SearchStore: SearchStorable {
                 self.displayEmptyState()
             }
             .store(in: &cancellables)
-        
+
         queryTextSubject
             .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
-            .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+            .filter {
+                !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            }
             .sink { [weak self] text in
                 guard let self else { return }
                 self.searchTask?.cancel()
@@ -87,7 +92,7 @@ final class SearchStore: SearchStorable {
             self.searchError = nil
             self.isLoading = true
             defer { isLoading = false }
-            
+
             do {
                 guard
                     let request = buildRequest(
@@ -103,7 +108,7 @@ final class SearchStore: SearchStorable {
 
                 let resp = try await networkCache.get(from: request)
                 guard let response = resp else { return }
-                
+
                 try Task.checkCancellation()
                 self.handleResponse(for: response)
             } catch {
@@ -112,6 +117,20 @@ final class SearchStore: SearchStorable {
                 }
             }
         }
+    }
+
+    func getRecents() async {
+        let cachedSearches = await networkCache.getRecent(count: 32)
+        let resolveSearches = Array(
+            cachedSearches
+                .lazy
+                .compactMap {
+                    if case .resolve(let value) = $0 { return value }
+                    return nil
+                }
+                .prefix(16)
+        )
+        recents = resolveSearches.map { $0.item }
     }
 
     private func buildRequest(for request: SearchRequest) -> URLRequest? {
@@ -141,7 +160,7 @@ final class SearchStore: SearchStorable {
             return
         }
     }
-    
+
     private func displayEmptyState() {
         tracks = []
         artists = []

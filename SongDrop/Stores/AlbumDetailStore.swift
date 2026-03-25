@@ -24,7 +24,6 @@ final class AlbumDetailStore: DetailStorable {
     init(
         networkCache: NetworkCache<SearchResponse>,
         apiConfig: APIConfig,
-        item: Album,
         provider: Provider
     ) {
         self.networkCache = networkCache

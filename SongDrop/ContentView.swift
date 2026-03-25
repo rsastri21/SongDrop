@@ -12,7 +12,7 @@ struct ContentView: View {
     var body: some View {
         TabView {
             Tab("Recents", systemImage: "music.note") {
-                Text("Recents View")
+                RecentsView()
             }
             Tab("Settings", systemImage: "gear") {
                 Text("Settings View")
@@ -28,5 +28,6 @@ struct ContentView: View {
     ContentView()
         .environment(SearchStore(networkCache: .init(), apiConfig: APIConfig()))
         .environment(TrackDetailStore(networkCache: .init(), apiConfig: APIConfig(), provider: .spotify))
+        .environment(AlbumDetailStore(networkCache: .init(), apiConfig: APIConfig(), provider: .spotify))
         .environment(ImageStore())
 }

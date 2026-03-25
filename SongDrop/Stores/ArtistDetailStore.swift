@@ -24,7 +24,6 @@ final class ArtistDetailStore: DetailStorable {
     init(
         networkCache: NetworkCache<SearchResponse>,
         apiConfig: APIConfig,
-        item: Artist,
         provider: Provider
     ) {
         self.networkCache = networkCache

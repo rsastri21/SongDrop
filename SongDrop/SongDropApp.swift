@@ -18,6 +18,7 @@ struct SongDropApp: App {
     @State var searchCache: NetworkCache<SearchResponse>
     @State var searchStore: SearchStore
     @State var trackDetailStore: TrackDetailStore
+    @State var albumDetailStore: AlbumDetailStore
 
     init() {
         let apiConfig = APIConfig()
@@ -34,6 +35,11 @@ struct SongDropApp: App {
             apiConfig: apiConfig,
             provider: .spotify
         )
+        let albumDetailStore = AlbumDetailStore(
+            networkCache: searchCache,
+            apiConfig: apiConfig,
+            provider: .spotify
+        )
 
         Task {
             await searchCache.hydrate()
@@ -45,6 +51,7 @@ struct SongDropApp: App {
         _imageStore = State(initialValue: imageStore)
         _searchStore = State(initialValue: searchStore)
         _trackDetailStore = State(initialValue: trackDetailStore)
+        _albumDetailStore = State(initialValue: albumDetailStore)
     }
 
     var body: some Scene {
@@ -53,6 +60,7 @@ struct SongDropApp: App {
                 .environment(imageStore)
                 .environment(searchStore)
                 .environment(trackDetailStore)
+                .environment(albumDetailStore)
         }
     }
 }

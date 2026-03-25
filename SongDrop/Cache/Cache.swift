@@ -59,6 +59,7 @@ actor Cache<V: Codable>: Caching {
         return keySet.compactMap { key in
             get(forKey: key)
         }
+        .reversed()
     }
     
     func set(_ value: V?, forKey key: String) {

@@ -37,6 +37,15 @@ struct NilOnEmptyURL: Codable, Equatable, Hashable {
     }
 }
 
+// MARK: Artwork Protocol
+
+protocol Displayable: Identifiable, Hashable {
+    var id: String { get }
+    var name: String { get }
+    var thumbnail: URL { get }
+    var art: URL { get }
+}
+
 // MARK: - Enums
 
 enum ResourceType: String, Codable {
@@ -61,7 +70,7 @@ struct ShareUrl: Codable, Hashable {
     let appleMusic: URL?
 }
 
-struct Track: Codable, Hashable, Identifiable {
+struct Track: Codable, Hashable, Identifiable, Displayable {
     let id: String
     let name: String
     let artists: [String]
@@ -81,7 +90,7 @@ struct Artist: Codable, Hashable, Identifiable {
     let type: ResourceType
 }
 
-struct Album: Codable, Hashable, Identifiable {
+struct Album: Codable, Hashable, Identifiable, Displayable {
     let id: String
     let name: String
     let artist: String
