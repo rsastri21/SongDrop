@@ -9,17 +9,12 @@ import SwiftUI
 
 struct TrackDetailView: View {
 
-    @Environment(ImageStore.self) private var imageStore
     @Environment(TrackDetailStore.self) private var trackStore
 
     let track: Track
 
     @State private var colors: GradientColors? = nil
     private var isDark: Bool { GradientExtractor.isDark(colors: colors) }
-
-    private var imageState: ImageStore.State {
-        imageStore.state(for: track.thumbnail.absoluteString)
-    }
 
     var body: some View {
         VStack(spacing: 32) {
@@ -99,13 +94,10 @@ struct TrackDetailView: View {
         }
         .ignoresSafeArea()
         .task {
-            imageStore.load(url: track.thumbnail)
-            await trackStore.search(for: track)
-        }
-        .onChange(of: imageState, initial: true) {
-            if case .loaded(let uIImage) = imageState {
-                colors = GradientExtractor.fitGradient(from: uIImage)
+            if let image = try? await ImageCache.shared.image(forUrl: track.thumbnail) {
+                colors = GradientExtractor.fitGradient(from: image)
             }
+            await trackStore.search(for: track)
         }
     }
 }
@@ -136,7 +128,6 @@ struct TrackDetailView: View {
             type: .track
         )
     )
-    .environment(ImageStore.shared)
     .environment(
         TrackDetailStore(
             networkCache: .init(),

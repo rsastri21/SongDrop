@@ -78,5 +78,4 @@ struct SearchItemResultView<T: Hashable>: View {
         ),
         shape: .square
     )
-    .environment(ImageStore())
 }

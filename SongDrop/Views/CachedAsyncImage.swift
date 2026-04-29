@@ -15,12 +15,12 @@ enum CachedAsyncImagePhase {
 }
 
 struct CachedAsyncImage<Content: View>: View {
-    
-    @Environment(ImageStore.self) private var store
-    
+
+    @State private var phase: CachedAsyncImagePhase = .empty
+
     private let url: URL
     private let content: (CachedAsyncImagePhase) -> Content
-    
+
     init(
         url: URL,
         @ViewBuilder content: @escaping (CachedAsyncImagePhase) -> Content,
@@ -28,20 +28,16 @@ struct CachedAsyncImage<Content: View>: View {
         self.url = url
         self.content = content
     }
-    
+
     var body: some View {
-        switch store.state(for: url.absoluteString) {
-        case .idle:
-            content(.empty)
-                .task {
-                    store.load(url: url)
+        content(phase)
+            .task {
+                do {
+                    let image = try await ImageCache.shared.image(forUrl: url)
+                    phase = .success(Image(uiImage: image))
+                } catch {
+                    phase = .failure(error)
                 }
-        case .loading:
-            content(.empty)
-        case .loaded(let image):
-            content(.success(Image(uiImage: image)))
-        case .failed(let error):
-            content(.failure(error))
-        }
+            }
     }
 }

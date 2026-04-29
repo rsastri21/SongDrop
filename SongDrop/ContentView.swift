@@ -29,5 +29,4 @@ struct ContentView: View {
         .environment(SearchStore(networkCache: .init(), apiConfig: APIConfig()))
         .environment(TrackDetailStore(networkCache: .init(), apiConfig: APIConfig(), provider: .spotify))
         .environment(AlbumDetailStore(networkCache: .init(), apiConfig: APIConfig(), provider: .spotify))
-        .environment(ImageStore())
 }

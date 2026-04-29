@@ -64,5 +64,4 @@ struct RecentItemView<T: Displayable>: View {
             type: .track
         )
     )
-    .environment(ImageStore())
 }

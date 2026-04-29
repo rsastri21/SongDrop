@@ -9,7 +9,6 @@ import SwiftUI
 
 struct AlbumDetailView: View {
     
-    @Environment(ImageStore.self) private var imageStore
     @Environment(AlbumDetailStore.self) private var albumStore
 
     let album: Album
@@ -17,9 +16,6 @@ struct AlbumDetailView: View {
     @State private var colors: GradientColors? = nil
     private var isDark: Bool { GradientExtractor.isDark(colors: colors) }
 
-    private var imageState: ImageStore.State {
-        imageStore.state(for: album.thumbnail.absoluteString)
-    }
     var body: some View {
         VStack(spacing: 32) {
             VStack {
@@ -98,13 +94,10 @@ struct AlbumDetailView: View {
         }
         .ignoresSafeArea()
         .task {
-            imageStore.load(url: album.thumbnail)
-            await albumStore.search(for: album)
-        }
-        .onChange(of: imageState, initial: true) {
-            if case .loaded(let uIImage) = imageState {
-                colors = GradientExtractor.fitGradient(from: uIImage)
+            if let image = try? await ImageCache.shared.image(forUrl: album.thumbnail) {
+                colors = GradientExtractor.fitGradient(from: image)
             }
+            await albumStore.search(for: album)
         }
     }
 }
@@ -134,7 +127,6 @@ struct AlbumDetailView: View {
             type: .album
         )
     )
-    .environment(ImageStore.shared)
     .environment(
         AlbumDetailStore(
             networkCache: .init(),

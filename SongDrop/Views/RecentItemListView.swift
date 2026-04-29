@@ -77,5 +77,4 @@ struct RecentItemListView<T: Displayable>: View {
         ],
         icon: "music.note",
     )
-    .environment(ImageStore())
 }

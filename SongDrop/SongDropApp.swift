@@ -10,9 +10,6 @@ import SwiftUI
 @main
 struct SongDropApp: App {
 
-    /// Image Dependencies
-    @State var imageStore: ImageStore
-
     /// Network Dependencies
     @State var apiConfig: APIConfig
     @State var searchCache: NetworkCache<SearchResponse>
@@ -25,7 +22,6 @@ struct SongDropApp: App {
         let searchCache = NetworkCache<SearchResponse>(
             cache: Cache(filename: "searchcache")
         )
-        let imageStore = ImageStore.shared
         let searchStore = SearchStore(
             networkCache: searchCache,
             apiConfig: apiConfig
@@ -48,7 +44,6 @@ struct SongDropApp: App {
 
         _apiConfig = State(initialValue: apiConfig)
         _searchCache = State(initialValue: searchCache)
-        _imageStore = State(initialValue: imageStore)
         _searchStore = State(initialValue: searchStore)
         _trackDetailStore = State(initialValue: trackDetailStore)
         _albumDetailStore = State(initialValue: albumDetailStore)
@@ -57,7 +52,6 @@ struct SongDropApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(imageStore)
                 .environment(searchStore)
                 .environment(trackDetailStore)
                 .environment(albumDetailStore)
