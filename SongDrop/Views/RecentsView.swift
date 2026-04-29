@@ -12,10 +12,12 @@ struct RecentsView: View {
     @Environment(SearchStore.self) var searchStore
 
     private var tracks: [Track] {
-        searchStore.recents.compactMap { item in
+        var seen = Set<String>()
+        return searchStore.recents.compactMap { item in
             switch item {
             case .track(let track):
-                return track
+                let key = track.name.lowercased() + (track.artists.first?.lowercased() ?? "")
+                return seen.insert(key).inserted ? track : nil
             default:
                 return nil
             }
@@ -23,10 +25,12 @@ struct RecentsView: View {
     }
 
     private var albums: [Album] {
-        searchStore.recents.compactMap { item in
+        var seen = Set<String>()
+        return searchStore.recents.compactMap { item in
             switch item {
             case .album(let album):
-                return album
+                let key = album.name.lowercased() + album.artist.lowercased()
+                return seen.insert(key).inserted ? album : nil
             default:
                 return nil
             }
@@ -75,5 +79,11 @@ struct RecentsView: View {
 
 #Preview {
     RecentsView()
-        .environment(SearchStore(networkCache: .init(), apiConfig: .init()))
+        .environment(
+            SearchStore(
+                networkCache: .init(),
+                apiConfig: .init(),
+                providerStore: .init(apiConfig: APIConfig())
+            )
+        )
 }

@@ -12,6 +12,7 @@ struct SongDropApp: App {
 
     /// Network Dependencies
     @State var apiConfig: APIConfig
+    @State var providerStore: ProviderStore
     @State var searchCache: NetworkCache<SearchResponse>
     @State var searchStore: SearchStore
     @State var trackDetailStore: TrackDetailStore
@@ -19,30 +20,34 @@ struct SongDropApp: App {
 
     init() {
         let apiConfig = APIConfig()
+        let providerStore = ProviderStore(apiConfig: apiConfig)
         let searchCache = NetworkCache<SearchResponse>(
             cache: Cache(filename: "searchcache")
         )
         let searchStore = SearchStore(
             networkCache: searchCache,
-            apiConfig: apiConfig
+            apiConfig: apiConfig,
+            providerStore: providerStore
         )
         let trackDetailStore = TrackDetailStore(
             networkCache: searchCache,
             apiConfig: apiConfig,
-            provider: .spotify
+            providerStore: providerStore
         )
         let albumDetailStore = AlbumDetailStore(
             networkCache: searchCache,
             apiConfig: apiConfig,
-            provider: .spotify
+            providerStore: providerStore
         )
 
         Task {
+            await providerStore.loadProviders()
             await searchCache.hydrate()
             try? await ImageCache.shared.hydrate()
         }
 
         _apiConfig = State(initialValue: apiConfig)
+        _providerStore = State(initialValue: providerStore)
         _searchCache = State(initialValue: searchCache)
         _searchStore = State(initialValue: searchStore)
         _trackDetailStore = State(initialValue: trackDetailStore)
@@ -52,6 +57,7 @@ struct SongDropApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(providerStore)
                 .environment(searchStore)
                 .environment(trackDetailStore)
                 .environment(albumDetailStore)

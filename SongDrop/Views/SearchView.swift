@@ -77,5 +77,11 @@ struct SearchView: View {
 
 #Preview {
     SearchView()
-        .environment(SearchStore(networkCache: .init(), apiConfig: APIConfig()))
+        .environment(
+            SearchStore(
+                networkCache: .init(),
+                apiConfig: APIConfig(),
+                providerStore: .init(apiConfig: APIConfig())
+            )
+        )
 }

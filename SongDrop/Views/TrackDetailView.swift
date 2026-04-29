@@ -132,7 +132,7 @@ struct TrackDetailView: View {
         TrackDetailStore(
             networkCache: .init(),
             apiConfig: APIConfig(),
-            provider: .spotify
+            providerStore: .init(apiConfig: APIConfig())
         )
     )
 }

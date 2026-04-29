@@ -54,13 +54,19 @@ enum ResourceType: String, Codable {
     case album
 }
 
-enum Provider: String, CaseIterable, Codable, Comparable {
+enum Provider: String, CaseIterable, Codable, Comparable, Hashable {
     static func < (lhs: Provider, rhs: Provider) -> Bool {
         lhs.rawValue < rhs.rawValue
     }
-    
+
     case spotify
     case appleMusic
+
+    var displayName: String {
+        rawValue
+            .replacingOccurrences(of: "([A-Z])", with: " $1", options: .regularExpression)
+            .capitalized
+    }
 }
 
 // MARK: - Core Models
@@ -106,6 +112,8 @@ enum SearchMode: String, Codable {
     case typeahead
     case resolve
 }
+
+typealias ProviderResponse = [Provider]
 
 struct TypeaheadResponse: Codable {
     let mode: SearchMode

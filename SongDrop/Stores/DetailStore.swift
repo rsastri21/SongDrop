@@ -16,7 +16,6 @@ protocol DetailStorable<V>: AnyObject {
     associatedtype V
     var networkCache: NetworkCache<SearchResponse> { get }
     var endpoint: String { get }
-    var defaultProvider: Provider { get }
     var isSearching: Bool { get set }
     var shareUrls: ShareUrl? { get set }
     var detailError: DetailError? { get set }

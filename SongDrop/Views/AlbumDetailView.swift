@@ -131,7 +131,7 @@ struct AlbumDetailView: View {
         AlbumDetailStore(
             networkCache: .init(),
             apiConfig: APIConfig(),
-            provider: .spotify
+            providerStore: .init(apiConfig: APIConfig())
         )
     )
 }

@@ -15,7 +15,7 @@ enum SearchError: Error {
 @MainActor
 protocol SearchStorable: Observable {
     var query: String { get set }
-    var provider: Provider { get set }
+    var provider: Provider { get }
 
     var tracks: [Track] { get set }
     var artists: [Artist] { get set }
@@ -46,8 +46,8 @@ final class SearchStore: SearchStorable {
             queryTextSubject.send(query)
         }
     }
-    // TODO: Get from a ProviderStore
-    public var provider: Provider = .spotify
+    private let providerStore: ProviderStore
+    public var provider: Provider { providerStore.selectedProvider }
 
     public var tracks: [Track] = []
     public var artists: [Artist] = []
@@ -60,9 +60,14 @@ final class SearchStore: SearchStorable {
     public var isLoading: Bool = false
     public var searchError: SearchError? = nil
 
-    init(networkCache: NetworkCache<SearchResponse>, apiConfig: APIConfig) {
+    init(
+        networkCache: NetworkCache<SearchResponse>,
+        apiConfig: APIConfig,
+        providerStore: ProviderStore
+    ) {
         self.networkCache = networkCache
         self.endpoint = apiConfig.search.absoluteString
+        self.providerStore = providerStore
 
         queryTextSubject
             .filter { $0.isEmpty }
