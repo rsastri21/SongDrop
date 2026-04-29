@@ -71,8 +71,9 @@ final class SearchStore: SearchStorable {
 
         queryTextSubject
             .filter { $0.isEmpty }
+            .debounce(for: .milliseconds(50), scheduler: DispatchQueue.main)
             .sink { [weak self] _ in
-                guard let self else { return }
+                guard let self, self.query.isEmpty else { return }
                 self.searchTask?.cancel()
                 self.displayEmptyState()
             }
@@ -80,6 +81,7 @@ final class SearchStore: SearchStorable {
 
         queryTextSubject
             .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
+            .removeDuplicates()
             .filter {
                 !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             }
