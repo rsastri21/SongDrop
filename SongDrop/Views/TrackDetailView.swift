@@ -62,24 +62,7 @@ struct TrackDetailView: View {
                 }
             }
             .padding()
-            VStack(spacing: 16) {
-                if let spotifyUrl = trackStore.shareUrls?.spotify {
-                    SharePillView(
-                        title: "Share from Spotify",
-                        icon: .spotifyLogoGreen,
-                        url: spotifyUrl
-                    )
-                    .transition(.scale(scale: 0.9).combined(with: .opacity))
-                }
-                if let appleMusicUrl = trackStore.shareUrls?.appleMusic {
-                    SharePillView(
-                        title: "Share from Apple Music",
-                        icon: .appleMusicIconRGBSm073120,
-                        url: appleMusicUrl
-                    )
-                    .transition(.scale(scale: 0.9).combined(with: .opacity))
-                }
-            }
+            ShareSectionView(store: trackStore)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .animation(.easeInOut, value: trackStore.shareUrls != nil)

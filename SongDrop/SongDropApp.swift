@@ -17,6 +17,7 @@ struct SongDropApp: App {
     @State var searchStore: SearchStore
     @State var trackDetailStore: TrackDetailStore
     @State var albumDetailStore: AlbumDetailStore
+    @State var artistDetailStore: ArtistDetailStore
 
     init() {
         let apiConfig = APIConfig()
@@ -39,6 +40,11 @@ struct SongDropApp: App {
             apiConfig: apiConfig,
             providerStore: providerStore
         )
+        let artistDetailStore = ArtistDetailStore(
+            networkCache: searchCache,
+            apiConfig: apiConfig,
+            providerStore: providerStore
+        )
 
         Task {
             await providerStore.loadProviders()
@@ -52,6 +58,7 @@ struct SongDropApp: App {
         _searchStore = State(initialValue: searchStore)
         _trackDetailStore = State(initialValue: trackDetailStore)
         _albumDetailStore = State(initialValue: albumDetailStore)
+        _artistDetailStore = State(initialValue: artistDetailStore)
     }
 
     var body: some Scene {
@@ -61,6 +68,7 @@ struct SongDropApp: App {
                 .environment(searchStore)
                 .environment(trackDetailStore)
                 .environment(albumDetailStore)
+                .environment(artistDetailStore)
         }
     }
 }

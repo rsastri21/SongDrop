@@ -34,9 +34,13 @@ struct CachedAsyncImage<Content: View>: View {
             .task {
                 do {
                     let image = try await ImageCache.shared.image(forUrl: url)
-                    phase = .success(Image(uiImage: image))
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        phase = .success(Image(uiImage: image))
+                    }
                 } catch {
-                    phase = .failure(error)
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        phase = .failure(error)
+                    }
                 }
             }
     }

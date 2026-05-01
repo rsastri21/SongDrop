@@ -17,7 +17,7 @@ struct RecentItemListView<T: Displayable>: View {
         VStack(alignment: .leading) {
             Text(title)
                 .font(.title2)
-                .fontWeight(.medium)
+                .fontWeight(.semibold)
                 .padding(.horizontal)
             if items.isEmpty {
                 ContentUnavailableView {

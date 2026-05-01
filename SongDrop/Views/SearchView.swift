@@ -70,6 +70,9 @@ struct SearchView: View {
             .navigationDestination(for: Album.self) { album in
                 AlbumDetailView(album: album)
             }
+            .navigationDestination(for: Artist.self) { artist in
+                ArtistDetailView(artist: artist)
+            }
             .searchable(text: $bindableSearchStore.query)
         }
     }
