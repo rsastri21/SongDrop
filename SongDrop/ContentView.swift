@@ -48,4 +48,5 @@ struct ContentView: View {
             )
         )
         .environment(ProviderStore(apiConfig: .init()))
+        .environment(CacheCoordinator(searchCache: .init()))
 }
