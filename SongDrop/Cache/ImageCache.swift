@@ -43,6 +43,14 @@ actor ImageCache {
         }
     }
     
+    func clearAll() throws {
+        metadataCache.removeAllObjects()
+        let files = try fileManager.contentsOfDirectory(at: cacheDirectory, includingPropertiesForKeys: nil)
+        for file in files {
+            try fileManager.removeItem(at: file)
+        }
+    }
+    
     func get(for remoteUrl: URL) async throws -> URL {
         let key = sha256(remoteUrl.absoluteString)
         let fileUrl = diskUrl(for: remoteUrl)

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SettingsView: View {
 
+    @Environment(CacheCoordinator.self) private var cacheCoordinator
     @Environment(ProviderStore.self) private var providerStore
 
     var body: some View {
@@ -34,9 +35,31 @@ struct SettingsView: View {
                         }
                     }
                 }
+                Section("Storage") {
+                    if let info = cacheCoordinator.storageInfo {
+                        StorageBarView(info: info)
+                            .padding(.vertical, 8)
+                    } else {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        }
+                    }
+                }
+                Section {
+                    Button("Clear Cache", role: .destructive) {
+                        Task { await cacheCoordinator.clearAll() }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .disabled(cacheCoordinator.isClearing)
+                }
             }
             .listStyle(.insetGrouped)
             .navigationTitle("Settings")
+        }
+        .task {
+            await cacheCoordinator.refreshStorageInfo()
         }
     }
 }
@@ -44,4 +67,5 @@ struct SettingsView: View {
 #Preview {
     SettingsView()
         .environment(ProviderStore(apiConfig: .init()))
+        .environment(CacheCoordinator(searchCache: .init()))
 }

@@ -14,6 +14,7 @@ struct SongDropApp: App {
     @State var apiConfig: APIConfig
     @State var providerStore: ProviderStore
     @State var searchCache: NetworkCache<SearchResponse>
+    @State var cacheCoordinator: CacheCoordinator
     @State var searchStore: SearchStore
     @State var trackDetailStore: TrackDetailStore
     @State var albumDetailStore: AlbumDetailStore
@@ -25,6 +26,7 @@ struct SongDropApp: App {
         let searchCache = NetworkCache<SearchResponse>(
             cache: Cache(filename: "searchcache")
         )
+        let cacheCoordinator = CacheCoordinator(searchCache: searchCache)
         let searchStore = SearchStore(
             networkCache: searchCache,
             apiConfig: apiConfig,
@@ -55,6 +57,7 @@ struct SongDropApp: App {
         _apiConfig = State(initialValue: apiConfig)
         _providerStore = State(initialValue: providerStore)
         _searchCache = State(initialValue: searchCache)
+        _cacheCoordinator = State(initialValue: cacheCoordinator)
         _searchStore = State(initialValue: searchStore)
         _trackDetailStore = State(initialValue: trackDetailStore)
         _albumDetailStore = State(initialValue: albumDetailStore)
@@ -65,6 +68,7 @@ struct SongDropApp: App {
         WindowGroup {
             ContentView()
                 .environment(providerStore)
+                .environment(cacheCoordinator)
                 .environment(searchStore)
                 .environment(trackDetailStore)
                 .environment(albumDetailStore)
