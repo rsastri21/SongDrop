@@ -61,6 +61,7 @@ struct SearchView: View {
                         }
                     }
                     .listStyle(.inset)
+                    .scrollDismissesKeyboard(.immediately)
                 }
             }
             .navigationTitle(Text("Search"))
