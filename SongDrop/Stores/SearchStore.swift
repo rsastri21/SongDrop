@@ -37,6 +37,7 @@ final class SearchStore: SearchStorable {
         String, Never
     >("")
     @ObservationIgnored private var cancellables = Set<AnyCancellable>()
+    @ObservationIgnored private var hydrationTask: Task<Void, Never>?
 
     // MARK: - State
 
@@ -68,6 +69,10 @@ final class SearchStore: SearchStorable {
         self.networkCache = networkCache
         self.endpoint = apiConfig.search.absoluteString
         self.providerStore = providerStore
+
+        hydrationTask = Task {
+            await networkCache.hydrate()
+        }
 
         queryTextSubject
             .filter { $0.isEmpty }
@@ -127,6 +132,7 @@ final class SearchStore: SearchStorable {
     }
 
     func getRecents() async {
+        await hydrationTask?.value
         let cachedSearches = await networkCache.getRecent(count: 32)
         let resolveSearches = Array(
             cachedSearches

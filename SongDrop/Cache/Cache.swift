@@ -22,9 +22,9 @@ protocol Caching<V>: Actor {
 }
 
 actor Cache<V: Codable>: Caching {
-    
+
     // MARK: - Properties
-    
+
     private let cache: NSCache<NSString, CacheEntry<V>>
     private var keyTracker: KeyTracker<V>
     
@@ -56,10 +56,16 @@ actor Cache<V: Codable>: Caching {
     func getRecent(count: Int = 10) -> [V] {
         let start = max(0, keyTracker.keys.count - count)
         let keySet = Array(keyTracker.keys[start..<keyTracker.keys.count])
-        return keySet.compactMap { key in
+        let results = keySet.compactMap { key in
             get(forKey: key)
         }
-        .reversed()
+        if results.count < keySet.count {
+            try? loadFromDisk()
+            return keySet.compactMap { key in
+                get(forKey: key)
+            }.reversed()
+        }
+        return results.reversed()
     }
     
     func set(_ value: V?, forKey key: String) {
@@ -85,7 +91,7 @@ actor Cache<V: Codable>: Caching {
     func removeAll() {
         keyTracker.keys.removeAll()
         cache.removeAllObjects()
-        
+
         try? saveToDisk()
     }
     

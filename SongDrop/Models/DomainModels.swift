@@ -19,12 +19,12 @@ struct NilOnEmptyURL: Codable, Equatable, Hashable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        let string = try container.decode(String.self)
-        if !string.isEmpty {
-            wrappedValue = URL(string: string)
-        } else {
+        guard !container.decodeNil() else {
             wrappedValue = nil
+            return
         }
+        let string = try container.decode(String.self)
+        wrappedValue = string.isEmpty ? nil : URL(string: string)
     }
 
     func encode(to encoder: Encoder) throws {

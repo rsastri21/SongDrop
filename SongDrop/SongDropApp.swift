@@ -50,7 +50,6 @@ struct SongDropApp: App {
 
         Task {
             await providerStore.loadProviders()
-            await searchCache.hydrate()
             try? await ImageCache.shared.hydrate()
         }
 
